@@ -1,0 +1,3 @@
+= Discord Bot Base
+
+This is a base to for my discord bots. Originally started in link:https://github.com/ST3VI3-RICHI3/ST3-Moderator/tree/Rewrite[ST3-Moderator/Rewrite^].
