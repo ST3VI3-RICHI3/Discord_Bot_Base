@@ -19,8 +19,11 @@
 import discord
 from discord.ext import commands
 from async_timeout import timeout
+import platform
+import os
 from BotBase import Vars
 from BotBase.Vars import VDict
+from BotBase.Core.Print import prt as print
 
 class RemoteControl(commands.Cog):
 
@@ -30,9 +33,30 @@ class RemoteControl(commands.Cog):
     @commands.command(aliases=["d.shutdown"])
     async def DEV_SHUTDOWN(self, ctx):
         if ctx.author.id in VDict["Perms"]["Dev"]:
+            print("Bot shutting down.")
             for cog in Vars.Loaded_Cogs:
                 self.bot.unload_extension(cog)
-                exit()
+            exit()
+
+    @commands.command(aliases=["d.restart"])
+    async def DEV_RESTART(self, ctx):
+        if ctx.author.id in VDict["Perms"]["Dev"]:
+            print("Bot restarting.")
+            for cog in Vars.Loaded_Cogs:
+                self.bot.unload_extension(cog)
+            if platform.system().lower() == "windows":
+                os.system("start bot.py")
+            else:
+                os.system("python bot.py")
+            exit()
+    
+    @commands.command(aliases=["d.Rcon", "d.RCon", "d.rcon"])
+    async def DEV_REMOTE_CONSOLE(self, ctx, *, cmd: str):
+        if ctx.author.id in VDict["Perms"]["Dev"]:
+            CmdO = os.popen(cmd).read()
+            if CmdO != "": await ctx.send(f"Command returned: ```{str(CmdO)}```")
+            else: await ctx.send("Command returned no output.")
+            print(f"Rcon command (\"{cmd}\") returned: {str(CmdO)}")
 
 def setup(bot):
     bot.add_cog(RemoteControl(bot))
