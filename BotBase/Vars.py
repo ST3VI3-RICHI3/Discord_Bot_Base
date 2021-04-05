@@ -20,7 +20,7 @@ VDict = {}
 VDict["Prefix"] = ""
 VDict["Intents"] = []
 VDict["Perms"] = {}
-VDict["Perms"]["Dev"] = [169501254899335168]
+VDict["Perms"]["Dev"] = []
 
 Loaded_Cogs = []
 __TOKEN = None
