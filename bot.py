@@ -46,15 +46,17 @@ if os.path.isdir(".git"):
 print("Bot initialising [Done]     ")
 
 if os.path.isdir("./Cogs"):
-    print(f"Loading cogs [0/{len(Vars.Loaded_Cogs)}]", type="Cog", end="\r")
+    print(f"Loading cogs [0/{len(os.listdir('./Cogs'))}]", type="Cog", end="\r")
+    i = 0
     for cog in os.listdir("./Cogs"):
         if cog.endswith(".py"):
             try:
                 bot.load_extension(f"Cogs.{cog[:-3]}")
                 Vars.Loaded_Cogs.append(f"Cogs.{cog[:-3]}")
-                print(f"Loading cogs [{len(Vars.Loaded_Cogs)}/{len(os.listdir('./Cogs'))}]", type="Cog", end="\r")
+                i += 1
+                print(f"Loading cogs [{i}/{len(os.listdir('./Cogs'))}]", type="Cog", end="\r")
             except Exception as e:
-                print(f"Failed loading extention \"Cogs/{cog[:-3]}\". Error: {e}")
+                print(f"Failed loading extention \"Cogs/{cog[:-3]}\". Error, {e}")
     print(f"Loading cogs [Done]                ", type="Cog",)
 else:
     print("Cog directory not found, skipping cogs.", type="Cog",)
