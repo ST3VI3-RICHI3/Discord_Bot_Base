@@ -34,12 +34,12 @@ bot.remove_command('help') #Removes the default discord help command
 
 print("Bot initialising [phase 3/3]", end="\r")
 try: bot.load_extension(f"BotBase.Core_Cogs.Cog_Funcs"); Vars.Loaded_Cogs.append("BotBase.Core_Cogs.Cog_Funcs")
-except: print("Failed to load core cog commands.", type="err")
+except: print("Failed to load core cog command (Cog_Funcs).", type="err")
 try: bot.load_extension(f"BotBase.Core_Cogs.Remote_Control"); Vars.Loaded_Cogs.append("BotBase.Core_Cogs.Remote_Control")
-except: print("Failed to load remote control commands.", type="err")
-if os.path.isdir(".git"): 
-    try: bot.load_extension(f"BotBase.Core_Cogs.Remote_Control"); Vars.Loaded_Cogs.append("BotBase.Core_Cogs.Remote_Control")
-    except: print("Failed to load remote control commands.", type="err")
+except: print("Failed to load remote control command (Remote_Control).", type="err")
+if os.path.isdir(".git"):
+    try: bot.load_extension(f"BotBase.Core_Cogs.Git"); Vars.Loaded_Cogs.append("BotBase.Core_Cogs.Remote_Git")
+    except: print("Failed to load remote control command (Git).", type="err")
 
 print("Bot initialising [Done]     ")
 
