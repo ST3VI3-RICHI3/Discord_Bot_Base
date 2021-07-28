@@ -16,65 +16,26 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+import discord
 from discord.ext import commands
-from async_timeout import timeout
-import platform
-import sys
-import os
-from BotBase import Vars
-from BotBase.Vars import VDict
 from BotBase.Core.Print import prt as print
+from BotBase.Vars import VDict
 
-class GitControl(commands.Cog):
+class ErrorHandler(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
 
-	def __init__(self, bot):
-		self.bot = bot
+    @commands.Cog.listener()
+    async def on_command_error(self, ctx, error):
 
-	@commands.Cog.listener()
-	async def on_command_error(self, ctx, error):
-		if hasattr(ctx.command, "on_error"):
-				return
+        if hasattr(ctx.command, "on_error"):
+            return
+        
+        error = getattr(error, 'original', error)
 
-		O = "An error has occured: \n\n--ST3VI3'S ERROR HANDLER--\n\n  "  # output
-		if ctx.command != None:
-			O = f"{O}Command: {ctx.command}\n  "
-
-		#Below is temporarily disabled. The intention is to print back cog name and line number for error.
-		#try:
-			#error
-		#except:
-			# exc_type, exc_obj, exc_tb = sys.exc_info()
-			# fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-			#O = f"{O}File: {error.__traceback__.tb_frame.f_code.co_filename}\n  Line: {error.__traceback__.tb_lineno}\n  "
-
-		error = getattr(error, 'original', error)
-
-		Severity = "Undetermined"
-		Class = "Unknown"
-		if isinstance(error, commands.MissingRequiredArgument):
-			Severity = "Unimportant"
-			Class = "User invoked"
-		if isinstance(error, commands.BadArgument):
-			Severity = "Unimportant"
-			Class = "User invoked"
-		if isinstance(error, commands.CommandNotFound):
-			Severity = "Unimportant"
-			Class = "User invoked"
-		if isinstance(error, commands.CommandInvokeError):
-			Severity = "Medium"
-			Class = "Code error"
-		if isinstance(error, AttributeError):
-			Severity = "Medium"
-			Class = "Code error / Var error"
-		if isinstance(error, UnboundLocalError):
-			Severity = "Critical"
-			Class = "Code error / Var print"
-
-		O = f"{O}Error: {str(error)}\n  Error type: {str(type(error))[8:-2]}\n  Error class: {Class}\n  Sverity: {Severity}\n  "
-
-		O = f"{O}\n--------------------------"
-		print(O, type="err")
-		await ctx.send(f"```{O}```")
+        os = f"A command caused an error:\n\n  --BOT BASE ERROR HANDLER--  \n\n    Error: {str(type(error))[8:-2]}\n           {str(error)}\n    Source: {ctx.command}\n\n  --------------------------  "
+        print(os, type="err", end="\n\n")
+        if ctx.author.id in VDict["Perms"]["Dev"]: await ctx.send(f"```{os}```")
 
 def setup(bot):
-    bot.add_cog(GitControl(bot))
+    bot.add_cog(ErrorHandler(bot))

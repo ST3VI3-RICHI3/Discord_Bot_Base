@@ -37,6 +37,8 @@ try: bot.load_extension(f"BotBase.Core_Cogs.Cog_Funcs"); Vars.Loaded_Cogs.append
 except: print("Failed to load core cog command (Cog_Funcs).", type="err")
 try: bot.load_extension(f"BotBase.Core_Cogs.Remote_Control"); Vars.Loaded_Cogs.append("BotBase.Core_Cogs.Remote_Control")
 except: print("Failed to load remote control command (Remote_Control).", type="err")
+try: bot.load_extension(f"BotBase.Core_Cogs.ErrorHandler"); Vars.Loaded_Cogs.append("BotBase.Core_Cogs.ErrorHandler")
+except: print("Failed to load remote control command (ErrorHandler).", type="err")
 if os.path.isdir(".git"):
     try: bot.load_extension(f"BotBase.Core_Cogs.Git"); Vars.Loaded_Cogs.append("BotBase.Core_Cogs.Remote_Git")
     except: print("Failed to load remote control command (Git).", type="err")
