@@ -28,8 +28,7 @@ print("Bot initialising [phase 1/3]", end="\r")
 Settings.Load()
 
 print("Bot initialising [phase 2/3]", end="\r")
-intents = discord.Intents.default()
-intents = Intents.SetIntents(intents, VDict["Intents"])
+intents = Intents.SetIntents(discord.Intents.default(), VDict["Intents"])#Sets intents to match config
 bot = commands.Bot(command_prefix=VDict["Prefix"], intents=intents)# This sets the prefix that the bot will use.
 bot.remove_command('help') #Removes the default discord help command
 
