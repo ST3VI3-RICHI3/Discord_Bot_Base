@@ -45,9 +45,10 @@ class Cog_Utils(commands.Cog):
                 try:
                     async with timeout(60):
                         resp = await self.bot.wait_for('message', check=lambda message: message.author == ctx.author)
+                        resp = resp.content
                 except:
                     resp = "NO_RESP"
-                if resp.content.lower() != "conf":
+                if str(resp).lower() != "conf":
                     await ctx.send("Aborting command.")
                     return
             try:
@@ -69,7 +70,7 @@ class Cog_Utils(commands.Cog):
                         resp = await self.bot.wait_for('message', check=lambda message: message.author == ctx.author)
                 except:
                     resp = "NO_RESP"
-                if resp.content.lower() != "conf":
+                if resp.lower() != "conf":
                     await ctx.send("Aborting command.")
                     return
             try:
