@@ -15,15 +15,12 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
-import discord
+import discord, os, BotBase, platform
 from discord.ext import commands
-import os
-import BotBase
 from BotBase import Vars
+from BotBase.Core import Settings, Intents
 from BotBase.Core.Print import prt as print
-from BotBase.Core import Settings
 from BotBase.Vars import VDict
-from BotBase.Core import Intents
 
 print("Bot initialising [phase 1/3]", end="\r")
 Settings.Load()
