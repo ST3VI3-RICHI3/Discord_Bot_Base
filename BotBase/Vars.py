@@ -21,6 +21,7 @@ VDict["Prefix"] = ""
 VDict["Intents"] = []
 VDict["Perms"] = {}
 VDict["Perms"]["Dev"] = []
+VDict["IsWin"] = False
 
 Loaded_Cogs = []
 __TOKEN = None

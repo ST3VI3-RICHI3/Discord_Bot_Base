@@ -22,6 +22,8 @@ from BotBase.Core import Settings, Intents
 from BotBase.Core.Print import prt as print
 from BotBase.Vars import VDict
 
+if platform.system().lower() == "windows": VDict["IsWin"] = True
+
 print("Bot initialising [phase 1/3]", end="\r")
 Settings.Load()
 
