@@ -16,6 +16,9 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+Loaded_Cogs = []
+__TOKEN = None
+
 VDict = {}
 VDict["Prefix"] = ""
 VDict["Intents"] = []
@@ -23,5 +26,8 @@ VDict["Perms"] = {}
 VDict["Perms"]["Dev"] = []
 VDict["IsWin"] = False
 
-Loaded_Cogs = []
-__TOKEN = None
+Global = {}
+Global["VDict"] = VDict
+
+def RegisterGlobalVar(Varname, data={}):
+    Global[Varname] = data
