@@ -18,7 +18,7 @@
 import discord, os, BotBase, platform
 from discord.ext import commands
 from BotBase import Vars
-from BotBase.Core import Settings, Intents
+from BotBase.Core import Settings, Intents, Utils
 from BotBase.Core.Print import prt as print
 from BotBase.Vars import VDict
 
@@ -37,16 +37,16 @@ try: bot.load_extension(f"BotBase.Core_Cogs.Cog_Funcs"); Vars.Loaded_Cogs.append
 except: print("Failed to load core cog command (Cog_Funcs).", type="err")
 try: bot.load_extension(f"BotBase.Core_Cogs.Remote_Control"); Vars.Loaded_Cogs.append("BotBase.Core_Cogs.Remote_Control")
 except: print("Failed to load remote control command (Remote_Control).", type="err")
-try: bot.load_extension(f"BotBase.Core_Cogs.ErrorHandler"); Vars.Loaded_Cogs.append("BotBase.Core_Cogs.ErrorHandler")
-except: print("Failed to load remote control command (ErrorHandler).", type="err")
+try: bot.load_extension(f"BotBase.Core_Cogs.Error_Handler"); Vars.Loaded_Cogs.append("BotBase.Core_Cogs.Error_Handler")
+except: print("Failed to load error handler (ErrorHandler).", type="err")
 if os.path.isdir(".git"):
     try: bot.load_extension(f"BotBase.Core_Cogs.Git"); Vars.Loaded_Cogs.append("BotBase.Core_Cogs.Remote_Git")
-    except: print("Failed to load remote control command (Git).", type="err")
+    except: print("Failed to load git command (Git).", type="err")
 
 print("Bot initialising [Done]     ")
 
 if os.path.isdir("./Cogs"):
-    print(f"Loading cogs [0/{len(os.listdir('./Cogs'))}]", type="Cog", end="\r")
+    print(f"Loading cogs [0/{Utils.CountEndswith(os.listdir('./Cogs'), 'py')}]", type="Cog", end="\r")
     i = 0
     for cog in os.listdir("./Cogs"):
         if cog.endswith(".py"):
@@ -54,10 +54,10 @@ if os.path.isdir("./Cogs"):
                 bot.load_extension(f"Cogs.{cog[:-3]}")
                 Vars.Loaded_Cogs.append(f"Cogs.{cog[:-3]}")
                 i += 1
-                print(f"Loading cogs [{i}/{len(os.listdir('./Cogs'))}]", type="Cog", end="\r")
+                print(f"Loading cogs [{i}/{Utils.CountEndswith(os.listdir('./Cogs'), 'py')}]", type="Cog", end="\r")
             except Exception as e:
                 print(f"Failed loading extention \"Cogs/{cog[:-3]}\". Error, {e}")
-    print(f"Loading cogs [Done]                ", type="Cog",)
+    print(f"Loading cogs [Done, {str(i)} / {Utils.CountEndswith(os.listdir('./Cogs'), 'py')}]", type="Cog",)
 else:
     print("Cog directory not found, skipping cogs.", type="Cog",)
 
