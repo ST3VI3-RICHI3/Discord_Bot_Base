@@ -16,7 +16,9 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+from abc import get_cache_token
 import discord, os
+from discord.errors import InvalidData
 from discord.ext import commands
 from BotBase import Vars
 from BotBase.Vars import VDict
@@ -25,24 +27,63 @@ class Config(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
+        self.ModificatonBuffer = []
 
     @commands.command(aliases=["d.config"])
-    async def DEV_CONFIGURE(self, ctx, *, module: str = "%VD *"):
+    async def DEV_CONFIGURE(self, ctx, RW:str, Target: str, Value=None): #Self, CTX, Read/Write, Target, Value
         if ctx.author.id in VDict["Perms"]["Dev"]:
 
             rts = "" #Return String
 
-            if module.startswith("%VD"):
-                
-                module = module.split(" ")[1]
+            Targ = Target.split(".")
 
-                if module == "*":
-                    for key in VDict.keys():
-                        rts = f"{rts}\n{key} = {VDict[key]}"
+            def GetKey(Targ, Wd=VDict, rts=rts):
+
+                LI = 0 #List index
+
+                for prop in Targ:
+                    if LI > 0:
+                        if type(Wd) == dict:
+                            if prop in Wd.keys():
+                                Wd = Wd[prop]
+                                LI += 1
+                        else:
+                            rts = f"Error: Target `{Target}` is invalid, property {str(LI+1)} (`{Targ[LI]}`) expected dictionary, not {str(type(prop))}."
+                            raise(InvalidData)
+                    else:
+                        LI += 1
+                return Wd
+
+            if RW.lower().startswith("r"):
                 
+                if Targ[0] == "VDict":
+                    try:
+                        t = GetKey(Targ)
+                        if type(t) == dict:
+                            rts = "\n    ".join(f"\"{str(k)}\": {str(t[k])}" for k in t.keys())
+                            rts = f"{{\n    {rts}\n}}"
+                            rts = f"Value of `{Targ[len(Targ)-1]}`: ```{rts}```"
+                        else:
+                            rts = f"Value of `{Targ[len(Targ)-1]}`: ```{str(t)}```"
+                        
+                    except:
+                        pass
                 else:
-                    if module in VDict.keys():
-                        rts = f"Value of VDict key `{module}` is: ```{VDict[module]}```"
+                    rts = f"Unknown data source `{Targ[0]}`."
+
+            elif RW.lower().startswith("w"):
+                if Value:
+                    if Targ[0] == "VDict":
+                        try:
+                            GetKey(Targ)
+                            self.ModificatonBuffer.append([Target, Value])
+                            rts = f"Staged `{Targ[len(Targ)-1]}` to be upddated to value `{Value}`."
+                        except:
+                            pass
+                    else:
+                        rts = f"Unknown data source `{Targ[0]}`."
+                else:
+                    rts = f"No value provided."
 
             await ctx.send(rts)
 
